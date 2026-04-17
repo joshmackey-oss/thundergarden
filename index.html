@@ -112,16 +112,14 @@
     }
 
     .title {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: clamp(52px, 10vw, 120px);
-      line-height: 0.92;
-      letter-spacing: -0.02em;
-      color: var(--white);
-      text-transform: none;
-      text-shadow: 0 2px 40px rgba(0,0,0,0.5);
       opacity: 0;
       animation: titleIn 2s ease forwards 0.5s;
+    }
+
+    .title img {
+      width: clamp(280px, 50vw, 600px);
+      height: auto;
+      filter: drop-shadow(0 2px 40px rgba(0,0,0,0.5));
     }
 
     @keyframes titleIn {
@@ -465,8 +463,8 @@
 
     /* ── RESPONSIVE ───────────────────────────────────── */
     @media (max-width: 768px) {
-      .title {
-        font-size: clamp(40px, 12vw, 80px);
+      .title img {
+        width: clamp(220px, 60vw, 400px);
       }
 
       .nav {
@@ -479,6 +477,7 @@
         margin-bottom: 0;
         max-height: 85vh;
         overflow-y: auto;
+        border-radius: 16px 16px 0 0;
       }
 
       .overlay.open {
@@ -487,11 +486,8 @@
     }
 
     @media (max-width: 480px) {
-      .title {
-        font-size: 42px;
-      }
-      .title em {
-        font-size: 11px;
+      .title img {
+        width: 240px;
       }
     }
   </style>
@@ -522,7 +518,7 @@
   <!-- TITLE -->
   <div class="title-block">
     <h1 class="title">
-      Thunder<br>In The<br>Garden
+      <img src="Thunder-04.png" alt="Thunder in the Garden">
     </h1>
   </div>
 
