@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thunder in the Garden</title>
+  <meta name="description" content="Before He made you, He made everything else. This is why.">
+  <meta property="og:title" content="Thunder in the Garden">
+  <meta property="og:description" content="Before He made you, He made everything else. This is why.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thunder in the Garden">
+  <meta name="twitter:description" content="Before He made you, He made everything else. This is why.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-dim: rgba(201, 168, 76, 0.5);
+      --dark: #0a0a08;
+      --dark-green: #0d1a0e;
+      --white: #fff;
+      --white-dim: rgba(255,255,255,0.45);
+      --white-faint: rgba(255,255,255,0.18);
+      --serif: 'Playfair Display', Georgia, serif;
+      --body: 'Cormorant Garamond', Georgia, serif;
+      --ui: 'Inter', -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--dark);
+      color: var(--white);
+      font-family: var(--body);
+      cursor: default;
+    }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: cover;
+      transition: opacity 1.2s ease;
+    }
+
+    .hero video.hidden { opacity: 0; }
+    .hero video.visible { opacity: 1; }
+
+    /* Fallback static image if video hasn't loaded */
+    .hero-fallback {
+      position: absolute;
+      inset: 0;
+      background: url('tiger-hero.png') center center / cover no-repeat;
+      z-index: 0;
+      transition: opacity 0.8s ease;
+    }
+    .hero-fallback.loaded { opacity: 0; }
+
+    @media (max-width: 768px) {
+      .hero video {
+        transform: translate(-50%, -50%) scale(0.52);
+        min-width: 180%;
+        min-height: 180%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero video {
+        transform: translate(-50%, -50%) scale(0.48);
+        min-width: 200%;
+        min-height: 200%;
+      }
+    }
+
+    /* Dark vignette overlay */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(10,10,8,0.5) 70%, rgba(10,10,8,0.85) 100%),
+        linear-gradient(to bottom, rgba(10,10,8,0.1) 0%, transparent 30%, transparent 60%, rgba(10,10,8,0.6) 100%);
+      z-index: 1;
+    }
+
+    /* ── TITLE ────────────────────────────────────────── */
+    .title-block {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .title {
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: clamp(52px, 10vw, 120px);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-transform: none;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      animation: titleIn 2s ease forwards 0.5s;
+    }
+
+    @keyframes titleIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── NAV ──────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      gap: clamp(60px, 14vw, 160px);
+      padding: 28px 48px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 2.4s;
+    }
+
+    .nav button {
+      font-family: var(--ui);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0;
+      transition: opacity 0.3s;
+    }
+
+    .nav button:hover { opacity: 0.5; }
+
+    /* ── CHAPTER INDICATOR ────────────────────────────── */
+    .chapter-indicator {
+      position: fixed;
+      top: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 2.8s;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.7); }
+      50% { box-shadow: 0 0 0 5px rgba(201,168,76,0); }
+    }
+
+    .chapter-indicator span {
+      font-family: var(--ui);
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white-faint);
+    }
+
+    /* ── OVERLAYS ─────────────────────────────────────── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      background: rgba(10,10,8,0.88);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+    }
+    .overlay.open { display: flex; align-items: flex-end; justify-content: center; }
+
+    .pop {
+      background: var(--dark);
+      border: 1px solid var(--white-faint);
+      padding: 44px 48px 40px;
+      width: 440px;
+      max-width: calc(100vw - 48px);
+      margin-bottom: 80px;
+      position: relative;
+      animation: popUp 0.25s ease;
+    }
+
+    @keyframes popUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pop-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white-faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .pop-close:hover { color: var(--white); }
+
+    .pop-tag {
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--white-faint);
+      margin-bottom: 20px;
+    }
+
+    .pop-title {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 24px;
+    }
+
+    .pop-body {
+      font-family: var(--body);
+      font-size: 15px;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      line-height: 2;
+      color: var(--white-dim);
+      margin-bottom: 28px;
+    }
+
+    .pop-body strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    /* Tier / pricing */
+    .tier {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 20px 0;
+      border-top: 1px solid var(--white-faint);
+      border-bottom: 1px solid var(--white-faint);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .tier:hover { opacity: 0.6; }
+
+    .tier-name {
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .tier-desc {
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.8;
+    }
+
+    .tier-price {
+      font-family: var(--serif);
+      font-size: 24px;
+      color: var(--white);
+      white-space: nowrap;
+    }
+
+    .tier-action {
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .pop-note {
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--white-faint);
+      line-height: 2;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+
+    /* Signal badge */
+    .signal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white-faint);
+    }
+
+    .signal .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    /* Listen overlay specifics */
+    .listen-box {
+      border: 1px solid var(--white-faint);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .listen-label {
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white-faint);
+      margin-bottom: 6px;
+    }
+
+    .listen-title {
+      font-family: var(--serif);
+      font-size: 16px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .listen-meta {
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+    }
+
+    .pop input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--white-faint);
+      padding: 12px 0;
+      margin-bottom: 8px;
+      font-family: var(--body);
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      outline: none;
+    }
+    .pop input::placeholder { color: var(--white-faint); }
+
+    .pop-btn {
+      width: 100%;
+      background: var(--white);
+      color: var(--dark);
+      font-family: var(--ui);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 15px;
+      border: none;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.2s;
+    }
+    .pop-btn:hover { background: var(--cream); }
+
+    .pop-sub {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-family: var(--ui);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--white-faint);
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .pop-sub:hover { color: var(--white); }
+
+    /* ── PARTICLES ────────────────────────────────────── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+      0% { opacity: 0; transform: translateY(0) translateX(0); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(30px); }
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 768px) {
+      .title {
+        font-size: clamp(40px, 12vw, 80px);
+      }
+
+      .nav {
+        padding: 24px 24px;
+        gap: 48px;
+      }
+
+      .pop {
+        padding: 32px 28px 28px;
+        margin-bottom: 0;
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+
+      .overlay.open {
+        align-items: flex-end;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 42px;
+      }
+      .title em {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-fallback" id="hero-fallback"></div>
+    <video id="vid-a" class="visible" muted playsinline preload="auto" disableremoteplayback>
+      <source src="tiger.mp4" type="video/mp4">
+    </video>
+    <video id="vid-b" class="hidden" muted playsinline preload="auto" disableremoteplayback>
+      <source src="tiger.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- PARTICLES -->
+  <div class="particles" id="particles"></div>
+
+  <!-- CHAPTER INDICATOR -->
+  <div class="chapter-indicator">
+    <div class="pulse-dot"></div>
+    <span>Chapter 01 of 15 — Now Available</span>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <h1 class="title">
+      Thunder<br>In The<br>Garden
+    </h1>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button onclick="openOverlay('ov-story')">Creation</button>
+    <button onclick="openOverlay('ov-access')">Story</button>
+    <button onclick="openOverlay('ov-enter')">Listen</button>
+  </div>
+
+  <!-- ── OVERLAY: THE STORY ──────────────────────────── -->
+  <div class="overlay" id="ov-story" onclick="if(event.target===this)closeOverlay('ov-story')">
+    <div class="pop">
+      <button class="pop-close" onclick="closeOverlay('ov-story')">Close ×</button>
+      <div class="pop-tag">The Story</div>
+      <div class="pop-title">What if creation wasn't<br>an act of power — but<br>of longing?</div>
+      <div class="pop-body">
+        Before humanity. Before the name, the breath,<br>
+        the long argument that would become history —<br>
+        there was a garden, and something making it.<br><br>
+        Each chapter is a single moment of creation<br>
+        narrated by the Creator. Not as theology.<br>
+        <strong>As a love letter you were never meant to find.</strong><br><br>
+        15 chapters. Released twice a week.<br>
+        Written to be listened to.
+      </div>
+      <div class="signal"><span class="dot"></span>Chapter 01 available now</div>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: ACCESS ─────────────────────────────── -->
+  <div class="overlay" id="ov-access" onclick="if(event.target===this)closeOverlay('ov-access')">
+    <div class="pop">
+      <button class="pop-close" onclick="closeOverlay('ov-access')">Close ×</button>
+      <div class="pop-tag">Thunder in the Garden</div>
+      <div class="pop-title">15 chapters.<br>Every word. Forever.</div>
+      <div class="tier">
+        <div>
+          <div class="tier-name">Full Archive</div>
+          <div class="tier-desc">All 15 chapters. Text + audio.<br>One payment. No subscription.</div>
+        </div>
+        <div>
+          <div class="tier-price">$10</div>
+          <div class="tier-action">Get Access →</div>
+        </div>
+      </div>
+      <div class="pop-note">
+        No account required until checkout.<br>
+        You'll understand why this matters later.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: ENTER ──────────────────────────────── -->
+  <div class="overlay" id="ov-enter" onclick="if(event.target===this)closeOverlay('ov-enter')">
+    <div class="pop">
+      <button class="pop-close" onclick="closeOverlay('ov-enter')">Close ×</button>
+      <div class="pop-tag">Continue</div>
+      <div class="pop-title">Return to<br>the garden.</div>
+      <div class="listen-box">
+        <div class="listen-label">Now Available — Chapter 01</div>
+        <div class="listen-title">Light</div>
+        <div class="listen-meta" id="countdown">Next chapter in --:--:--</div>
+      </div>
+      <input type="email" placeholder="Your email">
+      <input type="password" placeholder="Access code">
+      <button class="pop-btn">Enter</button>
+      <a class="pop-sub" href="#" onclick="closeOverlay('ov-enter');openOverlay('ov-access');return false">No account — get access</a>
+    </div>
+  </div>
+
+  <script>
+    // ── OVERLAYS ──────────────────────────────────────
+    function openOverlay(id) {
+      document.getElementById(id).classList.add('open');
+    }
+    function closeOverlay(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+      }
+    });
+
+    // ── VIDEO CROSSFADE LOOP ──────────────────────────
+    const vidA = document.getElementById('vid-a');
+    const vidB = document.getElementById('vid-b');
+    const fallback = document.getElementById('hero-fallback');
+    let active = vidA, standby = vidB;
+    const CROSSFADE = 1.2;
+
+    function startVideo(v) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    }
+
+    function swap() {
+      standby.classList.remove('hidden');
+      standby.classList.add('visible');
+      active.classList.remove('visible');
+      active.classList.add('hidden');
+      const tmp = active;
+      active = standby;
+      standby = tmp;
+      standby.currentTime = 0;
+    }
+
+    function monitor() {
+      if (active.duration && active.currentTime >= active.duration - CROSSFADE) {
+        startVideo(standby);
+        swap();
+      }
+      requestAnimationFrame(monitor);
+    }
+
+    vidA.muted = true; vidB.muted = true;
+    vidA.volume = 0;   vidB.volume = 0;
+
+    // Hide fallback image once video is playing
+    vidA.addEventListener('playing', () => {
+      fallback.classList.add('loaded');
+    });
+
+    startVideo(vidA);
+    vidB.load();
+
+    vidA.addEventListener('loadedmetadata', () => requestAnimationFrame(monitor));
+
+    // Mobile unlock
+    const unlock = () => {
+      vidA.play().catch(() => {});
+      vidB.play().catch(() => {});
+      vidB.pause();
+      document.removeEventListener('click', unlock);
+      document.removeEventListener('touchstart', unlock);
+    };
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
+
+    // ── PARTICLES ─────────────────────────────────────
+    (function createParticles() {
+      const container = document.getElementById('particles');
+      const count = 35;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = (60 + Math.random() * 40) + '%';
+        p.style.width = (1 + Math.random() * 2) + 'px';
+        p.style.height = p.style.width;
+        p.style.animationDuration = (8 + Math.random() * 16) + 's';
+        p.style.animationDelay = (Math.random() * 12) + 's';
+        container.appendChild(p);
+      }
+    })();
+
+    // ── COUNTDOWN ─────────────────────────────────────
+    (function tick() {
+      const el = document.getElementById('countdown');
+      if (!el) return;
+      const now = new Date();
+      // Next release: find next Tuesday or Friday at 6am
+      const next = new Date(now);
+      const day = now.getDay();
+      let daysUntil;
+      // Tuesday = 2, Friday = 5
+      if (day < 2) daysUntil = 2 - day;
+      else if (day < 5) daysUntil = 5 - day;
+      else daysUntil = (2 + 7) - day;
+
+      next.setDate(now.getDate() + daysUntil);
+      next.setHours(6, 0, 0, 0);
+
+      if (next <= now) {
+        next.setDate(next.getDate() + (day < 5 ? (5 - day) : (2 + 7 - day)));
+        next.setHours(6, 0, 0, 0);
+      }
+
+      const d = next - now;
+      const p = n => String(n).padStart(2, '0');
+      const h = Math.floor(d / 3600000);
+      const m = Math.floor((d % 3600000) / 60000);
+      const s = Math.floor((d % 60000) / 1000);
+
+      if (h >= 24) {
+        const days = Math.floor(h / 24);
+        el.textContent = 'Next chapter in ' + days + 'd ' + p(h % 24) + ':' + p(m) + ':' + p(s);
+      } else {
+        el.textContent = 'Next chapter in ' + p(h) + ':' + p(m) + ':' + p(s);
+      }
+      setTimeout(tick, 1000);
+    })();
+  </script>
+
+</body>
+</html>
