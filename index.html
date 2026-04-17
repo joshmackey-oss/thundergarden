@@ -214,8 +214,9 @@
     .overlay.open { display: flex; align-items: flex-end; justify-content: center; }
 
     .pop {
-      background: var(--dark);
-      border: 1px solid var(--white-faint);
+      background: #1a1a18;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
       padding: 44px 48px 40px;
       width: 440px;
       max-width: calc(100vw - 48px);
@@ -237,7 +238,7 @@
       font-size: 9px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       background: none;
       border: none;
       cursor: pointer;
@@ -250,7 +251,7 @@
       font-size: 9px;
       letter-spacing: 0.24em;
       text-transform: uppercase;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       margin-bottom: 20px;
     }
 
@@ -270,7 +271,7 @@
       font-weight: 300;
       letter-spacing: 0.02em;
       line-height: 2;
-      color: var(--white-dim);
+      color: rgba(255,255,255,0.7);
       margin-bottom: 28px;
     }
 
@@ -285,8 +286,8 @@
       justify-content: space-between;
       align-items: flex-start;
       padding: 20px 0;
-      border-top: 1px solid var(--white-faint);
-      border-bottom: 1px solid var(--white-faint);
+      border-top: 1px solid rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
       cursor: pointer;
       transition: opacity 0.2s;
     }
@@ -305,7 +306,7 @@
       font-family: var(--body);
       font-size: 13px;
       font-weight: 300;
-      color: var(--white-dim);
+      color: rgba(255,255,255,0.7);
       line-height: 1.8;
     }
 
@@ -320,7 +321,7 @@
       font-family: var(--ui);
       font-size: 9px;
       letter-spacing: 0.14em;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       text-transform: uppercase;
       text-align: right;
       margin-top: 4px;
@@ -330,7 +331,7 @@
       font-family: var(--ui);
       font-size: 9px;
       letter-spacing: 0.06em;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.45);
       line-height: 2;
       text-transform: uppercase;
       margin-top: 20px;
@@ -345,7 +346,7 @@
       font-size: 9px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
     }
 
     .signal .dot {
@@ -358,7 +359,8 @@
 
     /* Listen overlay specifics */
     .listen-box {
-      border: 1px solid var(--white-faint);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
       padding: 16px 20px;
       margin-bottom: 20px;
     }
@@ -368,7 +370,7 @@
       font-size: 9px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       margin-bottom: 6px;
     }
 
@@ -383,7 +385,7 @@
       font-family: var(--ui);
       font-size: 9px;
       letter-spacing: 0.1em;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       text-transform: uppercase;
     }
 
@@ -391,7 +393,7 @@
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px solid var(--white-faint);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
       padding: 12px 0;
       margin-bottom: 8px;
       font-family: var(--body);
@@ -400,7 +402,7 @@
       color: var(--white);
       outline: none;
     }
-    .pop input::placeholder { color: var(--white-faint); }
+    .pop input::placeholder { color: rgba(255,255,255,0.4); }
 
     .pop-btn {
       width: 100%;
@@ -413,6 +415,7 @@
       text-transform: uppercase;
       padding: 15px;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
       margin-top: 16px;
       transition: background 0.2s;
@@ -426,7 +429,7 @@
       font-family: var(--ui);
       font-size: 9px;
       letter-spacing: 0.12em;
-      color: var(--white-faint);
+      color: rgba(255,255,255,0.5);
       text-decoration: none;
       text-transform: uppercase;
       cursor: pointer;
