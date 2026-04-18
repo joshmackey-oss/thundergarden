@@ -504,7 +504,7 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-fallback" id="hero-fallback"></div>
-    <video id="vid-a" class="visible" muted playsinline preload="auto" disableremoteplayback>
+    <video id="vid-a" class="visible" autoplay muted playsinline preload="auto" disableremoteplayback>
       <source src="tiger.mp4" type="video/mp4">
     </video>
     <video id="vid-b" class="hidden" muted playsinline preload="auto" disableremoteplayback>
@@ -622,7 +622,10 @@
 
     function startVideo(v) {
       v.currentTime = 0;
-      v.play().catch(() => {});
+      v.muted = true;
+      v.setAttribute('muted', '');
+      const p = v.play();
+      if (p) p.catch(() => {});
     }
 
     function swap() {
@@ -644,29 +647,41 @@
       requestAnimationFrame(monitor);
     }
 
+    // Force muted state
     vidA.muted = true; vidB.muted = true;
     vidA.volume = 0;   vidB.volume = 0;
+    vidA.setAttribute('muted', '');
+    vidB.setAttribute('muted', '');
 
     // Hide fallback image once video is playing
     vidA.addEventListener('playing', () => {
       fallback.classList.add('loaded');
     });
 
+    // Try autoplay immediately
     startVideo(vidA);
     vidB.load();
 
+    // Retry on canplay
+    vidA.addEventListener('canplay', () => {
+      if (vidA.paused) startVideo(vidA);
+    });
+
     vidA.addEventListener('loadedmetadata', () => requestAnimationFrame(monitor));
 
-    // Mobile unlock
+    // Mobile unlock — retry on any user interaction
     const unlock = () => {
+      vidA.muted = true;
       vidA.play().catch(() => {});
       vidB.play().catch(() => {});
       vidB.pause();
       document.removeEventListener('click', unlock);
       document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('scroll', unlock);
     };
     document.addEventListener('click', unlock);
     document.addEventListener('touchstart', unlock);
+    document.addEventListener('scroll', unlock);
 
     // ── PARTICLES ─────────────────────────────────────
     (function createParticles() {
