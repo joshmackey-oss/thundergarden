@@ -70,6 +70,12 @@
     .hero video.hidden { opacity: 0; }
     .hero video.visible { opacity: 1; }
 
+    /* Hide native video controls */
+    .hero video::-webkit-media-controls { display: none !important; }
+    .hero video::-webkit-media-controls-start-playback-button { display: none !important; }
+    .hero video::-webkit-media-controls-panel { display: none !important; }
+    .hero video::-moz-media-controls { display: none !important; }
+
     /* Fallback static image if video hasn't loaded */
     .hero-fallback {
       position: absolute;
@@ -504,10 +510,10 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-fallback" id="hero-fallback"></div>
-    <video id="vid-a" class="visible" autoplay muted playsinline preload="auto" disableremoteplayback>
+    <video id="vid-a" class="visible" muted playsinline webkit-playsinline preload="auto" disableremoteplayback>
       <source src="tiger.mp4" type="video/mp4">
     </video>
-    <video id="vid-b" class="hidden" muted playsinline preload="auto" disableremoteplayback>
+    <video id="vid-b" class="hidden" muted playsinline webkit-playsinline preload="auto" disableremoteplayback>
       <source src="tiger.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
